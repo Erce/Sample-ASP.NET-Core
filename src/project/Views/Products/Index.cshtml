@@ -1,0 +1,107 @@
+@model IEnumerable<project.Models.Product>
+
+@{
+    IEnumerable<project.Models.Category> model2 = ViewBag.Categories;
+    int categoryId = ViewBag.CategoryId;
+}
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="bg-content">
+    <div class="container-fluid">
+        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-12 categories-container">
+            <div class="row categories-title-row text-center">Categories</div>
+            <div class="row categories-row">
+                <a asp-action="Index" asp-route-id="0" class="input-class form-control all-categories-button text-center">All</a>
+                @foreach (var item2 in model2)
+                {
+                    <a asp-action="Index" asp-route-id="@item2.ID" class="input-class form-control categories-button text-center">@Html.DisplayFor(modelItem => item2.Name)</a>
+                }
+            </div>
+        </div>
+        <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12 products-container">
+            <div class="row products-title-row text-center">Products</div>
+            <div class="row products-row">
+                @foreach (var item in Model)
+                {
+                    if (categoryId == item.CategoryID || categoryId == 0)
+                    {
+                        <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12 references-page-img-container" data-toggle="modal" data-target=".erce-@item.ID">
+                            <div class="product-img-container">
+                                <div class="item-image">
+                                    @{
+                                        var photo1 = item.Photos.FirstOrDefault();
+                                        var imgurl = "";
+                                        if (photo1 != null)
+                                        {
+                                            imgurl = photo1.ImgUrl;
+                                        }
+                                        else
+                                        {
+                                            imgurl = "";
+                                        }
+                                    }
+                                    <img class="img-responsive img-container-inside" id="img-@item.ID" src="~/uploads/img/@imgurl"/>
+                                </div>
+                                <div class="row item-content">
+                                    <div class="item-text">
+                                        <h4 class="product-img-container-title">@item.Name</h4>
+                                        <h5 class="product-img-container-name">@item.Price</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        @*<button class="btn btn-default" data-toggle="modal" data-target=".erce-@item.ID">@item.Name</button>*@
+                        <div class="modal fade bs-example-modal-lg erce-@item.ID" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                                <div class="modal-content">
+                                    <div id="carousel-example-generic-@item.ID" class="carousel slide" data-ride="carousel">
+                                        <!-- Wrapper for slides -->
+                                        <div class="carousel-inner">
+                                            @{var count = 0;}
+                                            @foreach (var photo in item.Photos)
+                                            {
+                                                if (count == 0)
+                                                {
+                                                    count = -1;
+                                                    <div class="item active">
+                                                        <img class="img-responsive" src="~/uploads/img/@photo.ImgUrl" alt="...">
+                                                        <div class="carousel-caption"></div>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="item">
+                                                        <img class="img-responsive" src="~/uploads/img/@photo.ImgUrl" alt="...">
+                                                        <div class="carousel-caption"></div>
+                                                    </div>
+                                                }
+
+                                            }
+                                        </div>
+                                        <!-- Controls -->
+                                        <a class="left carousel-control" href="#carousel-example-generic-@item.ID" role="button" data-slide="prev">
+                                            <span class="glyphicon glyphicon-chevron-left"></span>
+                                        </a>
+                                        <a class="right carousel-control" href="#carousel-example-generic-@item.ID" role="button" data-slide="next">
+                                            <span class="glyphicon glyphicon-chevron-right"></span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

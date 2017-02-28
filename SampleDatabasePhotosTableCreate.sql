@@ -1,0 +1,31 @@
+USE [SampleDatabase]
+GO
+
+/****** Object:  Table [dbo].[Photo]    Script Date: 2/27/2017 2:52:06 PM ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[Photo](
+	[ID] [int] IDENTITY(1,1) NOT NULL,
+	[ImgUrl] [nvarchar](max) NULL,
+	[Name] [nvarchar](max) NULL,
+	[ProductID] [int] NOT NULL,
+ CONSTRAINT [PK_Photo] PRIMARY KEY CLUSTERED 
+(
+	[ID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[Photo]  WITH CHECK ADD  CONSTRAINT [FK_Photo_Product_ProductID] FOREIGN KEY([ProductID])
+REFERENCES [dbo].[Product] ([ID])
+ON DELETE CASCADE
+GO
+
+ALTER TABLE [dbo].[Photo] CHECK CONSTRAINT [FK_Photo_Product_ProductID]
+GO
+

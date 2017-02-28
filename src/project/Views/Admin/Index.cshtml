@@ -1,0 +1,115 @@
+@model IEnumerable<project.Models.Product>
+
+@{
+    IEnumerable<project.Models.Category> model2 = ViewBag.Categories;
+    int categoryId = ViewBag.CategoryId;
+}
+
+@{
+    ViewData["Title"] = "Admin";
+}
+
+<div class="bg-content">
+    <div class="container-fluid">
+        <div class="col-lg-2 col-md-4 col-sm-12 col-xs-12 categories-container">
+            <div class="row categories-title-row text-center">Categories</div>
+            <div class="row categories-row">
+                <a class="input-class form-control text-center categories-button" asp-controller="Categories" asp-action="Create" style="height: auto;">Create New Category</a>
+                <a asp-action="Index" asp-route-id="0" class="input-class form-control all-categories-button text-center">All</a>
+                @foreach (var item2 in model2)
+                {
+                    <div class="input-class form-control category-button" style="height: auto;">
+                        <div class="row text-center">
+                            <a class="text-center" asp-action="Index" asp-route-id="@item2.ID">@Html.DisplayFor(modelItem => item2.Name)</a>
+                        </div>
+                        <div class="row text-center">
+                            <a asp-controller="Categories" asp-action="Edit" asp-route-id="@item2.ID">Edit</a> |
+                            <a asp-controller="Categories" asp-action="Delete" asp-route-id="@item2.ID">Delete</a> |
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="col-lg-10 col-md-8 col-sm-12 col-xs-12 products-container">
+            <div class="row products-title-row text-center">Products</div>
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <a class="input-class form-control text-center new-product-button" asp-controller="Products" asp-action="Create" style="height: auto;">Create New Product</a>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <a class="input-class form-control text-center new-product-button" asp-controller="Photos" asp-action="Index" asp-route-id="0" style="height: auto;">All Photos</a>
+                </div>
+            </div>
+            <div class="row products-row">
+                <div class="row product-row-title">
+                    <div class="col-lg-1 col-md-2 col-sm-3 col-xs-2">
+                        @Html.DisplayNameFor(model => model.ID)
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-3 col-xs-4">
+                        @Html.DisplayNameFor(model => model.Name)
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3">
+                        @Html.DisplayNameFor(model => model.Price)
+                    </div>
+                    <div class="col-lg-5 col-md-3 col-sm-3 col-xs-3 photos-text-mobile">
+                        @Html.DisplayNameFor(model => model.Photos)
+                    </div>
+                </div>
+
+                @foreach (var item in Model)
+                {
+                    if (categoryId == item.CategoryID || categoryId == 0)
+                    {
+                        <div class="row product-row-list">
+                            <div class="col-lg-1 col-md-2 col-sm-3 col-xs-2 row-id">
+                                @Html.DisplayFor(modelItem => item.ID)
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-3 col-xs-4 row-name">
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-3 col-xs-3 row-price">
+                                @Html.DisplayFor(modelItem => item.Price)
+                            </div>
+                            <div class="col-lg-5 col-md-6 col-sm-5 col-xs-3 row-photos-desktop">
+                                @if (item.Photos.FirstOrDefault() != null)
+                                {
+                                    <div class="row photo-row-title">
+                                        <div class="col-lg-3 col-md-3 col-sm-3">
+                                            Name
+                                        </div>
+                                        <div class="col-lg-4 col-md-3 col-sm-3">
+                                            ImgUrl
+                                        </div>
+                                    </div>
+                                }
+
+                                @foreach (var photo in item.Photos)
+                                {
+                                    <div class="row photo-row-list">
+                                        <div class="col-lg-3 col-md-3 col-sm-3">
+                                            @Html.DisplayFor(modelItem => photo.Name)
+                                        </div>
+                                        <div class="col-lg-4 col-md-3 col-sm-3">
+                                            @Html.DisplayFor(modelItem => photo.ImgUrl)
+                                        </div>
+                                        <div class="col-lg-5 col-md-6 col-sm-6">
+                                            <a asp-controller="Photos" asp-action="Edit" asp-route-id="@photo.ID">Edit</a> |
+                                            <a asp-controller="Photos" asp-action="Delete" asp-route-id="@photo.ID">Delete</a>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div class="col-md-2 col-sm-2 col-xs-3 row-photos-mobile">
+                                <a asp-controller="Photos" asp-action="Index" asp-route-id="@item.ID">Photos</a>
+                            </div>
+                            <div class="col-lg-2 col-md-4 col-sm-6 col-xs-12">
+                                <a asp-controller="Products" asp-action="Edit" asp-route-id="@item.ID">Edit</a> |
+                                <a asp-controller="Products" asp-action="Delete" asp-route-id="@item.ID">Delete</a>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</div>
